@@ -1,0 +1,116 @@
+[
+ {
+  "newspaper": "ALITHIA_TON_KYTHIRON",
+  "newspaper_gr": "ΑΛΗΘΕΙΑ ΤΩΝ ΚΥΘΗΡΩΝ",
+  "year_min": 1955,
+  "year_max": 1974
+ },
+ {
+  "newspaper": "FONI_TON_KYTHIRON",
+  "newspaper_gr": "ΦΩΝΗ ΤΩΝ ΚΥΘΗΡΩΝ",
+  "year_min": 1893,
+  "year_max": 1996
+ },
+ {
+  "newspaper": "GNOMES",
+  "newspaper_gr": "ΓΝΩΜΕΣ",
+  "year_min": 1984,
+  "year_max": 1985
+ },
+ {
+  "newspaper": "KYTHIRA",
+  "newspaper_gr": "ΚΥΘΗΡΑ",
+  "year_min": 1893,
+  "year_max": 1896
+ },
+ {
+  "newspaper": "KYTHIRAIKA",
+  "newspaper_gr": "ΚΥΘΗΡΑΪΚΑ",
+  "year_min": 1988,
+  "year_max": 2010
+ },
+ {
+  "newspaper": "KYTHIRAIKI",
+  "newspaper_gr": "ΚΥΘΗΡΑΪΚΗ",
+  "year_min": 1925,
+  "year_max": 1936
+ },
+ {
+  "newspaper": "KYTHIRAIKI_AYGI",
+  "newspaper_gr": "ΚΥΘΗΡΑΪΚΗ ΑΥΓΗ",
+  "year_min": 1897,
+  "year_max": 1899
+ },
+ {
+  "newspaper": "KYTHIRAIKI_DRASIS",
+  "newspaper_gr": "ΚΥΘΗΡΑΪΚΗ ΔΡΑΣΙΣ",
+  "year_min": 1936,
+  "year_max": 1975
+ },
+ {
+  "newspaper": "KYTHIRAIKI_ENOSIS",
+  "newspaper_gr": "ΚΥΘΗΡΑΪΚΗ ΕΝΩΣΙΣ",
+  "year_min": 1932,
+  "year_max": 1935
+ },
+ {
+  "newspaper": "KYTHIRAIKI_EPETIRIS",
+  "newspaper_gr": "ΚΥΘΗΡΑΪΚΗ ΕΠΕΤΗΡΙΣ",
+  "year_min": 1909,
+  "year_max": 1913
+ },
+ {
+  "newspaper": "KYTHIRAIKI_EPITHEORISIS",
+  "newspaper_gr": "ΚΥΘΗΡΑΪΚΗ ΕΠΙΘΕΩΡΗΣΙΣ",
+  "year_min": 1923,
+  "year_max": 1923
+ },
+ {
+  "newspaper": "KYTHIRAIKI_IDEA",
+  "newspaper_gr": "ΚΥΘΗΡΑΪΚΗ ΙΔΕΑ",
+  "year_min": 1980,
+  "year_max": 2004
+ },
+ {
+  "newspaper": "KYTHIRAIKON_VIMA",
+  "newspaper_gr": "ΚΥΘΗΡΑΪΚΟΝ ΒΗΜΑ",
+  "year_min": 1946,
+  "year_max": 1986
+ },
+ {
+  "newspaper": "KYTHIRAIKOS_KIRIX",
+  "newspaper_gr": "ΚΥΘΗΡΑΪΚΟΣ ΚΗΡΥΞ",
+  "year_min": 1931,
+  "year_max": 1948
+ },
+ {
+  "newspaper": "KYTHIRAIKOS_TYPOS",
+  "newspaper_gr": "ΚΥΘΗΡΑΪΚΟΣ ΤΥΠΟΣ",
+  "year_min": 1954,
+  "year_max": 1966
+ },
+ {
+  "newspaper": "KYTHIRAISMOS",
+  "newspaper_gr": "ΚΥΘΗΡΑΪΣΜΟΣ",
+  "year_min": 2005,
+  "year_max": 2010
+ },
+ {
+  "newspaper": "PAGKYTHIRAIKI",
+  "newspaper_gr": "ΠΑΓΚΥΘΗΡΑΪΚΗ",
+  "year_min": 1976,
+  "year_max": 2002
+ },
+ {
+  "newspaper": "PNEYMATIKA_KYTHIRA",
+  "newspaper_gr": "ΠΝΕΥΜΑΤΙΚΑ ΚΥΘΗΡΑ",
+  "year_min": 1982,
+  "year_max": 1987
+ },
+ {
+  "newspaper": "TROUTH_TON_KYTHIRON",
+  "newspaper_gr": "ΤΡΟΥΘ ΤΩΝ ΚΥΘΗΡΩΝ",
+  "year_min": 1947,
+  "year_max": 1955
+ }
+]
