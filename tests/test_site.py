@@ -84,3 +84,18 @@ def test_year_filter_narrows(page):
     # batch is in the DOM once the first is visible.
     for cite in page.locator("#results .cite").all_inner_texts():
         assert "1997" in cite
+
+
+def test_more_button_paginates_without_duplicates(page):
+    page.fill("#q", "\u039c\u03b1\u03c1\u03c3\u03ad\u03bb\u03bb\u03bf\u03c2")
+    page.fill("#year-from", "")
+    page.fill("#year-to", "")
+    page.click("#search-form button")
+    expect(page.locator("#results li")).to_have_count(20, timeout=30000)
+    page.click("#more")
+    expect(page.locator("#results li")).to_have_count(40, timeout=30000)
+    cites = page.locator("#results .cite").all_inner_texts()
+    snips = page.locator("#results .snip").all_inner_texts()
+    pairs = list(zip(cites, snips))
+    assert len(pairs) == 40
+    assert len(set(pairs)) == 40
