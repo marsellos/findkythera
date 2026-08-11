@@ -55,7 +55,7 @@ class BuildWebIndexTest(unittest.TestCase):
     def run_tool(self):
         r = subprocess.run(
             [sys.executable, TOOL, self.manifest, self.text_root, self.audit,
-             self.out_dir, "--chunk-bytes", "4096"],
+             self.out_dir, "--chunk-bytes", "5000"],
             capture_output=True, text=True)
         self.assertEqual(r.returncode, 0, r.stderr)
 
@@ -63,8 +63,12 @@ class BuildWebIndexTest(unittest.TestCase):
         self.run_tool()
         chunks = sorted(n for n in os.listdir(self.out_dir)
                         if n.startswith("web_index.db."))
-        self.assertGreater(len(chunks), 1)          # 4096-byte chunks force >1
+        self.assertGreater(len(chunks), 1)          # 5000 rounded down forces >1
         self.assertEqual(chunks[0], "web_index.db.000")
+        # 5000 rounds down to 4096 (multiple of the 1024 page size); every chunk
+        # but the last must be exactly that size.
+        for n in chunks[:-1]:
+            self.assertEqual(os.path.getsize(os.path.join(self.out_dir, n)), 4096)
         # Reassemble and inspect.
         db = os.path.join(self.tmp.name, "joined.db")
         with open(db, "wb") as out:
@@ -72,6 +76,10 @@ class BuildWebIndexTest(unittest.TestCase):
                 with open(os.path.join(self.out_dir, n), "rb") as c:
                     out.write(c.read())
         conn = sqlite3.connect(db)
+        # Accented text column must be dropped; only the normalized column ships.
+        col_names = [r[1] for r in conn.execute("PRAGMA table_info(pages)")]
+        self.assertIn("text_norm", col_names)
+        self.assertNotIn("text", col_names)
         rows = conn.execute(
             "SELECT newspaper_gr, year, issue, page, low_conf FROM pages "
             "ORDER BY issue, page").fetchall()
@@ -92,7 +100,7 @@ class BuildWebIndexTest(unittest.TestCase):
         self.assertEqual(cfg["serverMode"], "chunked")
         self.assertEqual(cfg["requestChunkSize"], 1024)
         self.assertEqual(cfg["databaseLengthBytes"], os.path.getsize(db))
-        self.assertEqual(cfg["serverChunkSize"], 4096)
+        self.assertEqual(cfg["serverChunkSize"], 4096)      # 5000 rounded down
         self.assertEqual(cfg["urlPrefix"], "web_index.db.")
         self.assertEqual(cfg["suffixLength"], 3)
         # papers.json
