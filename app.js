@@ -50,6 +50,7 @@ async function initGate() {
 // ---------- app ----------
 let worker = null;
 let pendingSearch = false;
+let searchGen = 0;
 let current = { fts: "", paper: "", yFrom: null, yTo: null, offset: 0 };
 
 async function enterApp() {
@@ -108,48 +109,52 @@ function startSearch() {
     yTo: parseInt($("year-to").value, 10) || null,
     offset: 0,
   };
+  searchGen++;
   $("results").innerHTML = "";
   $("more").hidden = true;
   runSearch(true);
 }
 
 async function runSearch(fresh) {
+  const gen = searchGen;
   setStatus("Αναζήτηση... / Searching...");
-  // \x01/\x02 as snippet markers: swapped for <mark> only AFTER HTML-escaping.
-  let sql = `SELECT newspaper_gr, newspaper, year, issue, page,
-      snippet(pages, 6, char(1), char(2), ' … ', 12) AS snip,
-      source_url, low_conf
-    FROM pages WHERE text_norm MATCH ?`;
-  const params = [current.fts];
-  if (current.paper) { sql += " AND newspaper = ?"; params.push(current.paper); }
-  if (current.yFrom) { sql += " AND CAST(year AS INTEGER) >= ?"; params.push(current.yFrom); }
-  if (current.yTo)   { sql += " AND CAST(year AS INTEGER) <= ?"; params.push(current.yTo); }
-  sql += " ORDER BY rank LIMIT ? OFFSET ?";
-  params.push(PAGE_SIZE + 1, current.offset);
-  let rows;
+  $("more").disabled = true;
   try {
-    rows = await worker.db.query(sql, params);
+    // \x01/\x02 as snippet markers: swapped for <mark> only AFTER HTML-escaping.
+    let sql = `SELECT newspaper_gr, newspaper, year, issue, page,
+        snippet(pages, 6, char(1), char(2), ' … ', 12) AS snip,
+        source_url, low_conf
+      FROM pages WHERE text_norm MATCH ?`;
+    const params = [current.fts];
+    if (current.paper) { sql += " AND newspaper = ?"; params.push(current.paper); }
+    if (current.yFrom) { sql += " AND CAST(year AS INTEGER) >= ?"; params.push(current.yFrom); }
+    if (current.yTo)   { sql += " AND CAST(year AS INTEGER) <= ?"; params.push(current.yTo); }
+    sql += " ORDER BY rank LIMIT ? OFFSET ?";
+    params.push(PAGE_SIZE + 1, current.offset);
+    const rows = await worker.db.query(sql, params);
+    if (gen !== searchGen) return; // a newer search superseded this one
+    const hasMore = rows.length > PAGE_SIZE;
+    for (const r of rows.slice(0, PAGE_SIZE)) $("results").appendChild(renderRow(r));
+    current.offset += PAGE_SIZE;
+    $("more").hidden = !hasMore;
+    if (fresh && rows.length === 0) {
+      setStatus("Καμία σελίδα του αρχείου δεν περιέχει αυτό. / " +
+        "No pages in the archive contain this.");
+    } else {
+      setStatus("");
+    }
   } catch (err) {
+    if (gen !== searchGen) return;
+    console.error(err);
     setStatus("Η αναζήτηση απέτυχε. Δοκιμάστε απλούστερες λέξεις. / " +
       "The search failed. Try plainer words.", true);
-    console.error(err);
-    return;
-  }
-  const hasMore = rows.length > PAGE_SIZE;
-  for (const r of rows.slice(0, PAGE_SIZE)) $("results").appendChild(renderRow(r));
-  current.offset += PAGE_SIZE;
-  $("more").hidden = !hasMore;
-  if (fresh && rows.length === 0) {
-    setStatus("Καμία σελίδα του αρχείου δεν περιέχει αυτό. / " +
-      "No pages in the archive contain this.");
-  } else {
-    setStatus("");
+  } finally {
+    if (gen === searchGen) $("more").disabled = false;
   }
 }
 
-function escapeHtml(s) {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
+const escapeHtml = (s) => String(s ?? "")
+  .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 function renderRow(r) {
   const li = document.createElement("li");
