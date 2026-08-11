@@ -55,4 +55,4 @@ if __name__ == "__main__":
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
     os.chdir(os.path.join(os.path.dirname(__file__), ".."))
     print(f"Serving FindKythera on http://localhost:{port} (Range enabled)")
-    ThreadingHTTPServer(("", port), RangeHandler).serve_forever()
+    ThreadingHTTPServer(("127.0.0.1", port), RangeHandler).serve_forever()
