@@ -22,8 +22,11 @@ BASE = f"http://127.0.0.1:{PORT}"
 def server():
     proc = subprocess.Popen([sys.executable, "tools/serve.py", str(PORT)])
     time.sleep(2)
+    if proc.poll() is not None:
+        raise RuntimeError(f"serve.py exited immediately, port {PORT} may be in use")
     yield
     proc.terminate()
+    proc.wait(timeout=5)
 
 
 @pytest.fixture(scope="module")
@@ -76,5 +79,8 @@ def test_year_filter_narrows(page):
     page.click("#search-form button")
     first = page.locator("#results li").first
     expect(first).to_be_visible(timeout=60000)
+    # Safe from a vacuous pass: the to_be_visible wait above guarantees at least one
+    # row, and app.js renders a whole result batch synchronously, so every row of the
+    # batch is in the DOM once the first is visible.
     for cite in page.locator("#results .cite").all_inner_texts():
         assert "1997" in cite
