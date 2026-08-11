@@ -1,7 +1,9 @@
 // FindKythera: gate, then browser-side FTS5 search via sql.js-httpvfs.
 // The database is fetched in 1024-byte pieces over HTTP range requests;
 // nothing is downloaded whole and nothing is rehosted.
-import { createDbWorker } from "./lib/index.js";
+// lib/index.js is a UMD bundle loaded as a classic script in index.html;
+// it puts createDbWorker on window.
+const { createDbWorker } = window;
 
 const PASS_SHA256 = "e3a80a83e5cbaeb477754c7e180920a9d343d8325dd4266305852a4b2e3f8b46";
 const PAGE_SIZE = 20;
@@ -47,11 +49,17 @@ async function initGate() {
 
 // ---------- app ----------
 let worker = null;
+let pendingSearch = false;
 let current = { fts: "", paper: "", yFrom: null, yTo: null, offset: 0 };
 
 async function enterApp() {
   $("gate").hidden = true;
   $("app").hidden = false;
+  $("search-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    startSearch();
+  });
+  $("more").addEventListener("click", () => runSearch(false));
   setStatus("Φόρτωση ευρετηρίου... / Loading the index...");
   try {
     const papers = await (await fetch("data/papers.json")).json();
@@ -62,22 +70,21 @@ async function enterApp() {
       $("paper-filter").appendChild(o);
     }
     worker = await createDbWorker(
-      [{ from: "jsonconfig", configUrl: "data/config.json" }],
+      [{ from: "jsonconfig", configUrl: new URL("data/config.json", location.href).toString() }],
       new URL("lib/sqlite.worker.js", location.href).toString(),
       new URL("lib/sql-wasm.wasm", location.href).toString(),
     );
     setStatus("");
+    if (pendingSearch) {
+      pendingSearch = false;
+      startSearch();
+    }
   } catch (err) {
     setStatus("Το ευρετήριο δεν φορτώθηκε. Δοκιμάστε ξανά αργότερα. / " +
       "The index failed to load. Try again later.", true);
     console.error(err);
     return;
   }
-  $("search-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    startSearch();
-  });
-  $("more").addEventListener("click", () => runSearch(false));
 }
 
 function setStatus(msg, isError) {
@@ -89,6 +96,11 @@ function setStatus(msg, isError) {
 function startSearch() {
   const fts = ftsQuery(unaccent($("q").value));
   if (!fts) return;
+  if (!worker) {
+    pendingSearch = true;
+    setStatus("Το ευρετήριο φορτώνει ακόμη... / The index is still loading...");
+    return;
+  }
   current = {
     fts,
     paper: $("paper-filter").value,

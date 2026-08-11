@@ -9,7 +9,7 @@ Usage: python tools/serve.py [port]   (from the findkythera folder; default 8000
 import os
 import re
 import sys
-from http.server import HTTPServer, SimpleHTTPRequestHandler
+from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 
 RANGE_RE = re.compile(r"bytes=(\d*)-(\d*)")
 
@@ -55,4 +55,4 @@ if __name__ == "__main__":
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
     os.chdir(os.path.join(os.path.dirname(__file__), ".."))
     print(f"Serving FindKythera on http://localhost:{port} (Range enabled)")
-    HTTPServer(("127.0.0.1", port), RangeHandler).serve_forever()
+    ThreadingHTTPServer(("", port), RangeHandler).serve_forever()
