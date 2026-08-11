@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>FindKythera - Αναζήτηση στις κυθηραϊκές εφημερίδες</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<header>
+  <h1>FindKythera</h1>
+  <p class="tagline">Αναζήτηση στις κυθηραϊκές εφημερίδες / Search the Kytherian newspapers</p>
+</header>
+
+<!-- State 1: password gate -->
+<section id="gate">
+  <p>Η σελίδα είναι υπό δοκιμή. Δώστε τον κωδικό. /
+     This page is under test. Enter the password.</p>
+  <form id="gate-form">
+    <input type="password" id="gate-input" autocomplete="off"
+           aria-label="Κωδικός / Password">
+    <button type="submit">Είσοδος / Enter</button>
+  </form>
+  <p id="gate-error" class="error" hidden>Λάθος κωδικός. / Wrong password.</p>
+</section>
+
+<!-- State 2 + 3: search and results -->
+<main id="app" hidden>
+  <form id="search-form">
+    <input type="search" id="q" autocomplete="off"
+           placeholder="Όνομα, τόπος, λέξη... / A name, a place, a word...">
+    <button type="submit">Αναζήτηση / Search</button>
+    <div class="filters">
+      <select id="paper-filter">
+        <option value="">Όλες οι εφημερίδες / All papers</option>
+      </select>
+      <label>Έτη / Years:
+        <input type="number" id="year-from" min="1893" max="2010" placeholder="1893">
+        <span>&ndash;</span>
+        <input type="number" id="year-to" min="1893" max="2010" placeholder="2010">
+      </label>
+    </div>
+  </form>
+
+  <div id="status" role="status"></div>
+  <ol id="results"></ol>
+  <button id="more" hidden>Περισσότερα / More</button>
+
+  <section id="about">
+    <h2>Τι είναι αυτό; / What is this?</h2>
+    <p>Ευρετήριο 2.278 τευχών κυθηραϊκών εφημερίδων, 1893 έως τη δεκαετία του 2000,
+       17.757 σελίδες. Καμία σελίδα δεν αναδημοσιεύεται εδώ: κάθε αποτέλεσμα οδηγεί
+       στην πλήρη σελίδα στο www.ksa-press.gr.</p>
+    <p>An index of 2,278 issues of Kytherian newspapers, 1893 to the 2000s, 17,757
+       pages. No page is republished here: every result links to the full page at
+       www.ksa-press.gr. Type Greek with or without accents.</p>
+  </section>
+</main>
+
+<footer>
+  <p>Antonios E. Marsellos, διευθυντής της Κυθηραϊκής Ιδέας (1996 έως το τέλος της)
+     και του Κυθηραϊσμού / director of Kytherian Idea and of Kytheraismos.</p>
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
