@@ -21,6 +21,10 @@ database is fetched with HTTP range requests, which that server does not support
 The chunks in data/ are committed as plain files on purpose: GitHub Pages does not
 serve Git LFS files, so each chunk stays under GitHub's 100 MB plain-file limit instead.
 
+After any rebuild, verify parity with the local index:
+
+    python ../efimerides_ocr/tools/check_web_index.py ../efimerides_ocr/index.db data
+
 ## Deploy
 
 NOT YET. Deploying to marsellos.github.io/findkythera needs Dr. M's explicit go-ahead.
