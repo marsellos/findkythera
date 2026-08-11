@@ -1,3 +1,11 @@
+"""End-to-end test of the FindKythera page against the real chunked database.
+
+Starts serve.py on a spare port, drives the page with Playwright: gate, search,
+citation format, link target, filter, no-results state.
+
+Run: python -m pytest tests/test_site.py -v   (from the findkythera folder)
+"""
+
 import re
 import subprocess
 import sys
