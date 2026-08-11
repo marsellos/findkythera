@@ -20,6 +20,9 @@ button {
   font: inherit; padding: 8px 14px; border: 1px solid var(--accent);
   border-radius: 4px; background: var(--accent); color: #fff; cursor: pointer;
 }
+button[disabled] {
+  opacity: 0.5; cursor: default;
+}
 .filters { margin-top: 10px; display: flex; gap: 16px; flex-wrap: wrap;
            align-items: center; color: var(--muted); font-size: 14px; }
 .filters select, .filters input[type=number] {

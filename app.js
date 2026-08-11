@@ -50,6 +50,7 @@ async function initGate() {
 // ---------- app ----------
 let worker = null;
 let pendingSearch = false;
+let loadFailed = false;
 let searchGen = 0;
 let current = { fts: "", paper: "", yFrom: null, yTo: null, offset: 0 };
 
@@ -81,6 +82,7 @@ async function enterApp() {
       startSearch();
     }
   } catch (err) {
+    loadFailed = true;
     setStatus("Το ευρετήριο δεν φορτώθηκε. Δοκιμάστε ξανά αργότερα. / " +
       "The index failed to load. Try again later.", true);
     console.error(err);
@@ -98,6 +100,11 @@ function startSearch() {
   const fts = ftsQuery(unaccent($("q").value));
   if (!fts) return;
   if (!worker) {
+    if (loadFailed) {
+      setStatus("Το ευρετήριο δεν φορτώθηκε. Δοκιμάστε ξανά αργότερα. / " +
+        "The index failed to load. Try again later.", true);
+      return;
+    }
     pendingSearch = true;
     setStatus("Το ευρετήριο φορτώνει ακόμη... / The index is still loading...");
     return;
@@ -119,6 +126,7 @@ async function runSearch(fresh) {
   const gen = searchGen;
   setStatus("Αναζήτηση... / Searching...");
   $("more").disabled = true;
+  $("search-submit").disabled = true;
   try {
     // \x01/\x02 as snippet markers: swapped for <mark> only AFTER HTML-escaping.
     let sql = `SELECT newspaper_gr, newspaper, year, issue, page,
@@ -149,7 +157,10 @@ async function runSearch(fresh) {
     setStatus("Η αναζήτηση απέτυχε. Δοκιμάστε απλούστερες λέξεις. / " +
       "The search failed. Try plainer words.", true);
   } finally {
-    if (gen === searchGen) $("more").disabled = false;
+    if (gen === searchGen) {
+      $("more").disabled = false;
+      $("search-submit").disabled = false;
+    }
   }
 }
 
