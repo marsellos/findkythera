@@ -27,14 +27,15 @@ After any rebuild, verify parity with the local index:
 
 ## Deploy
 
-NOT YET. Deploying to marsellos.github.io/findkythera needs Dr. M's explicit go-ahead.
+Live at https://marsellos.github.io/findkythera/ (go-ahead given 2026-08-11).
 
-Before going live, replace the dev password. Generate the hash with:
+To rotate the password, generate the new hash with:
 
     python -c "import hashlib; print(hashlib.sha256('THE-REAL-PASSWORD'.encode()).hexdigest())"
 
-then paste the result into the `PASS_SHA256` constant near the top of `app.js`.
-The hash committed in this repo is the dev password only.
+then paste the result into the `PASS_SHA256` constant near the top of `app.js` and push.
+The password itself is never committed; the browser tests read it from the
+`FK_PASSWORD` environment variable (they fall back to the old dev password "kythera").
 
 Warning: every data rebuild rewrites all six chunk files (about 470 MB), and git
 keeps every generation in history forever, so a few rebuilds after publishing will

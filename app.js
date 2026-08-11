@@ -5,7 +5,7 @@
 // it puts createDbWorker on window.
 const { createDbWorker } = window;
 
-const PASS_SHA256 = "e3a80a83e5cbaeb477754c7e180920a9d343d8325dd4266305852a4b2e3f8b46";
+const PASS_SHA256 = "9c164b96ea0bb8f6a3e38d69db4a6c0d8384759e2b36e8ab6dde876c1b61fd51";
 const PAGE_SIZE = 20;
 
 const $ = (id) => document.getElementById(id);

@@ -6,6 +6,7 @@ citation format, link target, filter, no-results state.
 Run: python -m pytest tests/test_site.py -v   (from the findkythera folder)
 """
 
+import os
 import re
 import subprocess
 import sys
@@ -16,6 +17,9 @@ from playwright.sync_api import expect, sync_playwright
 
 PORT = 8901
 BASE = f"http://127.0.0.1:{PORT}"
+# The gate password is never committed in plain text. Set FK_PASSWORD to the
+# password matching the PASS_SHA256 hash in app.js before running the suite.
+PASSWORD = os.environ.get("FK_PASSWORD", "kythera")
 
 
 @pytest.fixture(scope="module")
@@ -47,7 +51,7 @@ def test_gate_rejects_wrong_password(page):
 
 
 def test_gate_accepts_and_search_works(page):
-    page.fill("#gate-input", "kythera")
+    page.fill("#gate-input", PASSWORD)
     page.click("#gate-form button")
     expect(page.locator("#app")).to_be_visible()
     # Index loads: status clears and dropdown fills.
