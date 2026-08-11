@@ -4,5 +4,6 @@
   "databaseLengthBytes": 490811392,
   "serverChunkSize": 89999360,
   "urlPrefix": "web_index.db.",
-  "suffixLength": 3
+  "suffixLength": 3,
+  "cacheBust": "2026-08-11"
 }
