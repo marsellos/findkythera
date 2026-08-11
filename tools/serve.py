@@ -42,10 +42,13 @@ class RangeHandler(SimpleHTTPRequestHandler):
 
     def copyfile(self, source, outputfile):
         span = getattr(self, "_range_span", None)
-        if span is None:
-            return super().copyfile(source, outputfile)
-        outputfile.write(source.read(span))
-        self._range_span = None
+        try:
+            if span is None:
+                return super().copyfile(source, outputfile)
+            outputfile.write(source.read(span))
+        finally:
+            if span is not None:
+                self._range_span = None
 
 
 if __name__ == "__main__":
