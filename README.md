@@ -28,3 +28,19 @@ After any rebuild, verify parity with the local index:
 ## Deploy
 
 NOT YET. Deploying to marsellos.github.io/findkythera needs Dr. M's explicit go-ahead.
+
+Before going live, replace the dev password. Generate the hash with:
+
+    python -c "import hashlib; print(hashlib.sha256('THE-REAL-PASSWORD'.encode()).hexdigest())"
+
+then paste the result into the `PASS_SHA256` constant near the top of `app.js`.
+The hash committed in this repo is the dev password only.
+
+Warning: every data rebuild rewrites all six chunk files (about 470 MB), and git
+keeps every generation in history forever, so a few rebuilds after publishing will
+push the repo past GitHub's 1 GB comfort zone. Decide a strategy before rebuilding
+a published repo, for example squashing the data commit or keeping data on an
+orphan branch.
+
+The `.nojekyll` file at the repo root must stay: without it, GitHub Pages runs
+Jekyll over the tree, which is slow and unnecessary at this size.
