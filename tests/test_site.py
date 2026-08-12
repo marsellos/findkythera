@@ -1,7 +1,12 @@
 """End-to-end test of the FindKythera page against the real chunked database.
 
-Starts serve.py on a spare port, drives the page with Playwright: gate, search,
-citation format, link target, filter, no-results state.
+Starts serve.py on a spare port, drives the page with Playwright: gate, eye
+toggle, search, citation format, link target, filters, favorites, no-results.
+
+The real password is never committed. Search tests bypass the gate by seeding
+localStorage with the PASS_SHA256 value read out of app.js, which is exactly
+what the app itself stores after a correct entry (a real supported path).
+The gate-entry-by-password test runs only when FK_PASSWORD is set.
 
 Run: python -m pytest tests/test_site.py -v   (from the findkythera folder)
 """
@@ -11,15 +16,23 @@ import re
 import subprocess
 import sys
 import time
+from pathlib import Path
 
 import pytest
 from playwright.sync_api import expect, sync_playwright
 
 PORT = 8901
 BASE = f"http://127.0.0.1:{PORT}"
-# The gate password is never committed in plain text. Set FK_PASSWORD to the
-# password matching the PASS_SHA256 hash in app.js before running the suite.
-PASSWORD = os.environ.get("FK_PASSWORD", "kythera")
+PASSWORD = os.environ.get("FK_PASSWORD")
+
+APP_JS = Path(__file__).resolve().parent.parent / "app.js"
+PASS_SHA256 = re.search(
+    r'PASS_SHA256 = "([0-9a-f]{64})"', APP_JS.read_text(encoding="utf-8")
+).group(1)
+
+MARSELLOS = "Μαρσέλλος"  # accented, capitalised
+POTAMOS = "ποταμος"
+FOUND = "Βρέθηκαν"  # "Βρέθηκαν"
 
 
 @pytest.fixture(scope="module")
@@ -34,53 +47,104 @@ def server():
 
 
 @pytest.fixture(scope="module")
-def page(server):
+def browser(server):
     with sync_playwright() as p:
-        browser = p.chromium.launch()
-        pg = browser.new_page()
-        yield pg
-        browser.close()
+        b = p.chromium.launch()
+        yield b
+        b.close()
 
 
-def test_gate_rejects_wrong_password(page):
-    page.goto(BASE)
-    page.fill("#gate-input", "wrong")
-    page.click("#gate-form button")
-    expect(page.locator("#gate-error")).to_be_visible()
-    expect(page.locator("#app")).to_be_hidden()
+@pytest.fixture(scope="module")
+def page(browser):
+    """Past the gate: localStorage seeded with the stored hash."""
+    ctx = browser.new_context()
+    ctx.add_init_script(f"window.localStorage.setItem('fk-pass', '{PASS_SHA256}');")
+    pg = ctx.new_page()
+    pg.goto(BASE)
+    expect(pg.locator("#app")).to_be_visible()
+    yield pg
+    ctx.close()
 
 
-def test_gate_accepts_and_search_works(page):
-    page.fill("#gate-input", PASSWORD)
-    page.click("#gate-form button")
-    expect(page.locator("#app")).to_be_visible()
-    # Index loads: status clears and dropdown fills.
-    expect(page.locator("#paper-filter option")).to_have_count(20, timeout=30000)  # 19 + "all"
-    page.fill("#q", "\u039c\u03b1\u03c1\u03c3\u03ad\u03bb\u03bb\u03bf\u03c2")   # accented, capitalised
-    page.click("#search-form button")
+@pytest.fixture()
+def gate_page(browser):
+    """Fresh context standing in front of the gate."""
+    ctx = browser.new_context()
+    pg = ctx.new_page()
+    pg.goto(BASE)
+    yield pg
+    ctx.close()
+
+
+# ---------- gate ----------
+
+def test_gate_rejects_wrong_password(gate_page):
+    gate_page.fill("#gate-input", "wrong")
+    gate_page.click("#gate-form button[type=submit]")
+    expect(gate_page.locator("#gate-error")).to_be_visible()
+    expect(gate_page.locator("#app")).to_be_hidden()
+    # Typing again hides the stale error.
+    gate_page.fill("#gate-input", "wrong2")
+    expect(gate_page.locator("#gate-error")).to_be_hidden()
+
+
+def test_gate_eye_toggles_visibility(gate_page):
+    gate_page.fill("#gate-input", "abc")
+    assert gate_page.get_attribute("#gate-input", "type") == "password"
+    gate_page.click("#gate-eye")
+    assert gate_page.get_attribute("#gate-input", "type") == "text"
+    assert gate_page.get_attribute("#gate-eye", "aria-pressed") == "true"
+    gate_page.click("#gate-eye")
+    assert gate_page.get_attribute("#gate-input", "type") == "password"
+    assert gate_page.get_attribute("#gate-eye", "aria-pressed") == "false"
+
+
+@pytest.mark.skipif(not PASSWORD, reason="FK_PASSWORD not set")
+def test_gate_accepts_password(gate_page):
+    gate_page.fill("#gate-input", PASSWORD)
+    gate_page.click("#gate-form button[type=submit]")
+    expect(gate_page.locator("#app")).to_be_visible()
+
+
+# ---------- search ----------
+
+def test_search_works_citation_clean_link_paged(page):
+    # Index loads: dropdown fills (19 papers + "all").
+    expect(page.locator("#paper-filter option")).to_have_count(20, timeout=30000)
+    page.fill("#q", MARSELLOS)
+    page.click("#search-submit")
     first = page.locator("#results li").first
     expect(first).to_be_visible(timeout=30000)
     # Citation-first: bold line carries paper - issue - year - page.
     cite = first.locator(".cite").inner_text()
-    assert re.search(r"\u03c4\u03b5\u03cd\u03c7\u03bf\u03c2 .+ \u00b7 \d{4} \u00b7 \u03c3\u03b5\u03bb\. \d+", cite)
-    # Snippet highlights the match, link goes out to ksa-press.gr.
+    assert re.search(r"τεύχος .+ · \d{4} · σελ\. \d+", cite)
+    # No internal folder slug in the citation.
+    assert not re.search(r"[A-Z_]{4,}", cite)
+    # Snippet highlights the match and never opens with a double ellipsis.
     expect(first.locator(".snip mark").first).to_be_visible()
+    snip = first.locator(".snip").inner_text()
+    assert not re.match(r"…\s*…", snip)
+    # Link goes out to ksa-press.gr, over https, landing on the cited page.
     href = first.locator(".out a").get_attribute("href")
+    assert href.startswith("https://")
     assert "ksa-press.gr" in href
+    assert re.search(r"#page=\d+$", href)
+    # Success is announced with a count.
+    expect(page.locator("#status")).to_contain_text(FOUND)
 
 
 def test_no_results_message(page):
     page.fill("#q", "zzzzzqqqqq")
-    page.click("#search-form button")
+    page.click("#search-submit")
     expect(page.locator("#status")).to_contain_text(
         "No pages in the archive contain this", timeout=30000)
 
 
 def test_year_filter_narrows(page):
-    page.fill("#q", "\u03c0\u03bf\u03c4\u03b1\u03bc\u03bf\u03c2")
+    page.fill("#q", POTAMOS)
     page.fill("#year-from", "1997")
     page.fill("#year-to", "1997")
-    page.click("#search-form button")
+    page.click("#search-submit")
     first = page.locator("#results li").first
     expect(first).to_be_visible(timeout=60000)
     # Safe from a vacuous pass: the to_be_visible wait above guarantees at least one
@@ -90,11 +154,31 @@ def test_year_filter_narrows(page):
         assert "1997" in cite
 
 
+def test_reversed_year_range_completes(page):
+    # Regression: 1997-1893 used to build an unsatisfiable WHERE and hang for
+    # minutes. The range is now swapped, so this must complete like any search.
+    page.fill("#q", POTAMOS)
+    page.fill("#year-from", "1997")
+    page.fill("#year-to", "1893")
+    page.click("#search-submit")
+    expect(page.locator("#results li").first).to_be_visible(timeout=60000)
+    expect(page.locator("#status")).to_contain_text(FOUND, timeout=60000)
+
+
+def test_invalid_year_refused(page):
+    page.fill("#q", POTAMOS)
+    page.fill("#year-from", "97")
+    page.fill("#year-to", "")
+    page.click("#search-submit")
+    expect(page.locator("#status")).to_contain_text("Valid years", timeout=5000)
+    page.fill("#year-from", "")
+
+
 def test_more_button_paginates_without_duplicates(page):
-    page.fill("#q", "\u039c\u03b1\u03c1\u03c3\u03ad\u03bb\u03bb\u03bf\u03c2")
+    page.fill("#q", MARSELLOS)
     page.fill("#year-from", "")
     page.fill("#year-to", "")
-    page.click("#search-form button")
+    page.click("#search-submit")
     expect(page.locator("#results li")).to_have_count(20, timeout=30000)
     page.click("#more")
     expect(page.locator("#results li")).to_have_count(40, timeout=30000)
@@ -103,3 +187,25 @@ def test_more_button_paginates_without_duplicates(page):
     pairs = list(zip(cites, snips))
     assert len(pairs) == 40
     assert len(set(pairs)) == 40
+
+
+# ---------- favorites ----------
+
+def test_favorites_save_list_remove(page):
+    page.fill("#q", MARSELLOS)
+    page.click("#search-submit")
+    first = page.locator("#results li").first
+    expect(first).to_be_visible(timeout=30000)
+    star = first.locator(".fav-btn")
+    star.click()
+    expect(star).to_have_class(re.compile(r"\bsaved\b"))
+    expect(page.locator("#favs-btn")).to_contain_text("(1)")
+    # The favorites view lists the saved page with its link intact.
+    page.click("#favs-btn")
+    expect(page.locator("#results li")).to_have_count(1)
+    href = page.locator("#results .out a").get_attribute("href")
+    assert "ksa-press.gr" in href and "#page=" in href
+    # Remove empties the list and the counter.
+    page.locator("#results .fav-btn").click()
+    expect(page.locator("#results li")).to_have_count(0)
+    expect(page.locator("#favs-btn")).to_contain_text("(0)")

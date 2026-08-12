@@ -11,6 +11,8 @@
 
 <header>
   <h1>FindKythera</h1>
+  <p class="quote">«Ελεύθερη πρόσβαση στη γνώση των Κυθήρων, για τις γενιές που έρχονται.»<br>
+     Free access to Kythera's knowledge, for the generations to come.</p>
   <p class="tagline">Αναζήτηση στις κυθηραϊκές εφημερίδες / Search the Kytherian newspapers</p>
 </header>
 
@@ -19,8 +21,12 @@
   <p>Η σελίδα είναι υπό δοκιμή. Δώστε τον κωδικό. /
      This page is under test. Enter the password.</p>
   <form id="gate-form">
-    <input type="password" id="gate-input" autocomplete="off"
-           aria-label="Κωδικός / Password">
+    <span class="pw-wrap">
+      <input type="password" id="gate-input" autocomplete="off" autofocus
+             aria-label="Κωδικός / Password">
+      <button type="button" id="gate-eye" aria-pressed="false"
+              aria-label="Εμφάνιση κωδικού / Show password"></button>
+    </span>
     <button type="submit">Είσοδος / Enter</button>
   </form>
   <p id="gate-error" class="error" hidden>Λάθος κωδικός. / Wrong password.</p>
@@ -28,20 +34,24 @@
 
 <!-- State 2 + 3: search and results -->
 <main id="app" hidden>
-  <form id="search-form">
+  <form id="search-form" novalidate>
     <input type="search" id="q" autocomplete="off"
            aria-label="Αναζήτηση / Search"
            placeholder="Όνομα, τόπος, λέξη... / A name, a place, a word...">
     <button type="submit" id="search-submit">Αναζήτηση / Search</button>
     <div class="filters">
-      <select id="paper-filter">
+      <select id="paper-filter" aria-label="Εφημερίδα / Newspaper">
         <option value="">Όλες οι εφημερίδες / All papers</option>
       </select>
-      <label>Έτη / Years:
-        <input type="number" id="year-from" min="1893" max="2010" placeholder="1893">
+      <span class="years">
+        <span>Έτη / Years:</span>
+        <input type="number" id="year-from" min="1893" max="2010"
+               placeholder="από / from" aria-label="Έτος από / Year from">
         <span>&ndash;</span>
-        <input type="number" id="year-to" min="1893" max="2010" placeholder="2010">
-      </label>
+        <input type="number" id="year-to" min="1893" max="2010"
+               placeholder="έως / to" aria-label="Έτος έως / Year to">
+      </span>
+      <button type="button" id="favs-btn">★ Αποθηκευμένα / Saved (0)</button>
     </div>
   </form>
 
@@ -53,16 +63,27 @@
     <h2>Τι είναι αυτό; / What is this?</h2>
     <p>Ευρετήριο 2.278 τευχών κυθηραϊκών εφημερίδων, 1893 έως τη δεκαετία του 2000,
        17.757 σελίδες. Καμία σελίδα δεν αναδημοσιεύεται εδώ: κάθε αποτέλεσμα οδηγεί
-       στην πλήρη σελίδα στο www.ksa-press.gr.</p>
+       στην πλήρη σελίδα στο www.ksa-press.gr. Γράψτε ελληνικά με ή χωρίς τόνους.</p>
     <p>An index of 2,278 issues of Kytherian newspapers, 1893 to the 2000s, 17,757
        pages. No page is republished here: every result links to the full page at
        www.ksa-press.gr. Type Greek with or without accents.</p>
+    <p>Τα αποσπάσματα προέρχονται από αυτόματη ανάγνωση κειμένου (OCR): τυπώνονται
+       χωρίς τόνους και μπορεί να έχουν λάθη. Η αυθεντική σελίδα είναι πάντα ένα
+       κλικ μακριά. / The excerpts come from automatic text reading (OCR): they
+       print unaccented and may contain errors. The original page is always one
+       click away.</p>
   </section>
 </main>
 
 <footer>
   <p>Antonios E. Marsellos, διευθυντής της Κυθηραϊκής Ιδέας (1996 έως το τέλος της)
      και του Κυθηραϊσμού / director of Kytherian Idea and of Kytheraismos.</p>
+  <p>Ένα εργαλείο ανοιχτής γνώσης για την κυθηραϊκή κοινότητα, σε όλο τον κόσμο.
+     Υποστηρίζει το KYM2026 (Kytherean Young Minds) και το
+     <a href="https://resforme.com" target="_blank" rel="noopener">ResForMe.com</a>. /
+     A free-knowledge tool for the Kytherian community worldwide, supporting
+     KYM2026 (Kytherean Young Minds) and
+     <a href="https://resforme.com" target="_blank" rel="noopener">ResForMe.com</a>.</p>
 </footer>
 
 <script src="lib/index.js"></script>

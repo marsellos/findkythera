@@ -10,8 +10,18 @@ body {
 }
 header { padding: 28px 0 8px; border-bottom: 2px solid var(--ink); }
 h1 { margin: 0; font-size: 34px; }
+.quote { margin: 8px 0 2px; font-style: italic; color: var(--accent); }
 .tagline { margin: 4px 0 12px; color: var(--muted); }
 #gate { padding: 40px 0; }
+.pw-wrap {
+  display: inline-flex; align-items: center; gap: 6px; width: 60%;
+}
+.pw-wrap #gate-input { width: auto; flex: 1; min-width: 0; }
+#gate-eye {
+  background: none; border: 1px solid var(--line); color: var(--ink);
+  padding: 6px 8px; line-height: 0;
+}
+#gate-eye svg { width: 22px; height: 22px; }
 #gate-input, #q {
   font: inherit; padding: 8px 10px; border: 1px solid var(--line);
   border-radius: 4px; width: 60%;
@@ -28,7 +38,19 @@ button[disabled] {
 .filters select, .filters input[type=number] {
   font: inherit; padding: 4px 6px; border: 1px solid var(--line);
   border-radius: 4px; }
-.filters input[type=number] { width: 5.5em; }
+.filters select { max-width: 100%; }
+.filters input[type=number] { width: 6.5em; }
+.filters .years { display: inline-flex; align-items: center; gap: 6px; }
+#favs-btn {
+  background: none; border: 1px solid var(--line); color: var(--muted);
+  font-size: 14px; padding: 6px 10px;
+}
+#favs-btn.has-favs { color: var(--accent); border-color: var(--accent); }
+@media (pointer: coarse) {
+  .filters select, .filters input[type=number], #favs-btn, #gate-eye {
+    min-height: 44px;
+  }
+}
 #search-form { padding: 22px 0 6px; }
 #status { margin: 10px 0; color: var(--muted); min-height: 1.4em; }
 #status.error, .error { color: #a02020; }
@@ -38,10 +60,17 @@ button[disabled] {
 .lowconf { font-weight: 400; font-size: 13px; color: var(--muted); }
 .snip { margin: 6px 0; color: #3a3a3c; }
 .snip mark { background: var(--mark); padding: 0 1px; }
+.out { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
 .out a { font-size: 14px; color: var(--accent); }
+.fav-btn {
+  background: none; border: 1px solid var(--line); color: var(--muted);
+  font-size: 13px; padding: 5px 9px;
+}
+.fav-btn.saved { color: var(--accent); border-color: var(--accent); }
 #more { margin: 18px 0; }
 #about { margin-top: 44px; border-top: 1px solid var(--line);
          padding-top: 12px; font-size: 15px; color: var(--muted); }
 #about h2 { font-size: 17px; color: var(--ink); }
 footer { margin-top: 36px; font-size: 14px; color: var(--muted); }
+footer a { color: var(--accent); }
 [hidden] { display: none !important; }
