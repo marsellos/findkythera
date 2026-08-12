@@ -209,3 +209,38 @@ def test_favorites_save_list_remove(page):
     page.locator("#results .fav-btn").click()
     expect(page.locator("#results li")).to_have_count(0)
     expect(page.locator("#favs-btn")).to_contain_text("(0)")
+
+
+# ---------- village map ----------
+
+def test_map_draws_markers_and_panel(page):
+    page.fill("#q", MARSELLOS)
+    page.fill("#year-from", "")
+    page.fill("#year-to", "")
+    page.click("#search-submit")
+    expect(page.locator("#results li").first).to_be_visible(timeout=60000)
+    page.click("#map-btn")
+    expect(page.locator("#map-view")).to_be_visible()
+    # The rowids query runs, then circles appear: every village drawn, at
+    # least one co-occurring with the surname.
+    expect(page.locator("path.vc-hit").first).to_be_visible(timeout=120000)
+    assert page.locator("path.vc").count() == 72
+    # The map replaces the results list.
+    expect(page.locator("#results li")).to_have_count(0)
+    # Clicking a village opens the panel with the honest same-page count,
+    # then the live NEAR refinement and a list linking out to ksa-press.gr.
+    page.locator("path.vc-hit").first.dispatch_event("click")
+    expect(page.locator("#map-panel")).to_be_visible()
+    expect(page.locator("#map-panel")).to_contain_text("Στην ίδια σελίδα")
+    expect(page.locator("#map-panel")).to_contain_text("15 λέξεων",
+                                                       timeout=120000)
+    first_link = page.locator("#map-panel .out a").first
+    expect(first_link).to_be_visible(timeout=120000)
+    href = first_link.get_attribute("href")
+    assert "ksa-press.gr" in href and "#page=" in href
+
+
+def test_map_leaves_on_new_search(page):
+    page.click("#search-submit")  # same term again
+    expect(page.locator("#map-view")).to_be_hidden()
+    expect(page.locator("#results li").first).to_be_visible(timeout=60000)

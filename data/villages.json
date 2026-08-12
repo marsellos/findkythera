@@ -1,0 +1,807 @@
+[
+ {
+  "id": "potamos",
+  "gr": "Ποταμός",
+  "en": "Potamos",
+  "lat": 36.2995,
+  "lon": 22.962,
+  "patterns": [
+   "ποταμος",
+   "ποταμου",
+   "ποταμον",
+   "ποταμο"
+  ],
+  "ambiguous": true,
+  "note_gr": "και κοινή λέξη (ποτάμι)",
+  "note_en": "also the word for river"
+ },
+ {
+  "id": "chora",
+  "gr": "Χώρα",
+  "en": "Chora",
+  "lat": 36.1498,
+  "lon": 22.9873,
+  "patterns": [
+   "\"χωρα κυθηρων\"",
+   "\"χωρας κυθηρων\"",
+   "\"χωραν κυθηρων\"",
+   "\"χωρα των κυθηρων\"",
+   "\"χωρας των κυθηρων\""
+  ],
+  "note_gr": "μετριέται μόνο η φράση «Χώρα Κυθήρων», ο αριθμός βγαίνει μικρός",
+  "note_en": "only the phrase Chora of Kythera is counted, so the count runs low"
+ },
+ {
+  "id": "mylopotamos",
+  "gr": "Μυλοπόταμος",
+  "en": "Mylopotamos",
+  "lat": 36.2424,
+  "lon": 22.9452,
+  "patterns": [
+   "μυλοποταμ*"
+  ]
+ },
+ {
+  "id": "karavas",
+  "gr": "Καραβάς",
+  "en": "Karavas",
+  "lat": 36.3451,
+  "lon": 22.9523,
+  "patterns": [
+   "καραβας",
+   "καραβα"
+  ]
+ },
+ {
+  "id": "livadi",
+  "gr": "Λιβάδι",
+  "en": "Livadi",
+  "lat": 36.1819,
+  "lon": 22.9839,
+  "patterns": [
+   "λιβαδι",
+   "λιβαδιου"
+  ],
+  "ambiguous": true,
+  "note_gr": "και κοινή λέξη (λιβάδι)",
+  "note_en": "also the word for meadow"
+ },
+ {
+  "id": "kato-livadi",
+  "gr": "Κάτω Λιβάδι",
+  "en": "Kato Livadi",
+  "lat": 36.182,
+  "lon": 22.9953,
+  "patterns": [
+   "\"κατω λιβαδι\"",
+   "\"κατω λιβαδιου\""
+  ]
+ },
+ {
+  "id": "kapsali",
+  "gr": "Καψάλι",
+  "en": "Kapsali",
+  "lat": 36.1439,
+  "lon": 23.0016,
+  "patterns": [
+   "καψαλι",
+   "καψαλιου"
+  ]
+ },
+ {
+  "id": "avlemonas",
+  "gr": "Αβλέμονας",
+  "en": "Avlemonas",
+  "lat": 36.2269,
+  "lon": 23.0807,
+  "patterns": [
+   "αβλεμον*",
+   "αυλεμον*",
+   "αυλαιμον*"
+  ]
+ },
+ {
+  "id": "diakofti",
+  "gr": "Διακόφτι",
+  "en": "Diakofti",
+  "lat": 36.263,
+  "lon": 23.0759,
+  "patterns": [
+   "διακοφτ*"
+  ]
+ },
+ {
+  "id": "agia-pelagia",
+  "gr": "Αγία Πελαγία",
+  "en": "Agia Pelagia",
+  "lat": 36.3254,
+  "lon": 22.982,
+  "patterns": [
+   "\"αγια πελαγια\"",
+   "\"αγιας πελαγιας\"",
+   "\"αγιαν πελαγιαν\""
+  ],
+  "ambiguous": true,
+  "note_gr": "και όνομα αγίας",
+  "note_en": "also a saint's name"
+ },
+ {
+  "id": "logothetianika",
+  "gr": "Λογοθετιάνικα",
+  "en": "Logothetianika",
+  "lat": 36.2875,
+  "lon": 22.9576,
+  "patterns": [
+   "λογοθετιανικ*"
+  ]
+ },
+ {
+  "id": "aroniadika",
+  "gr": "Αρωνιάδικα",
+  "en": "Aroniadika",
+  "lat": 36.2662,
+  "lon": 22.9688,
+  "patterns": [
+   "αρωνιαδικ*"
+  ]
+ },
+ {
+  "id": "mitata",
+  "gr": "Μητάτα",
+  "en": "Mitata",
+  "lat": 36.2452,
+  "lon": 22.9931,
+  "patterns": [
+   "μητατα",
+   "μητατων"
+  ]
+ },
+ {
+  "id": "fratsia",
+  "gr": "Φράτσια",
+  "en": "Fratsia",
+  "lat": 36.2197,
+  "lon": 22.9793,
+  "patterns": [
+   "φρατσια",
+   "φρατσιων"
+  ]
+ },
+ {
+  "id": "karvounades",
+  "gr": "Καρβουνάδες",
+  "en": "Karvounades",
+  "lat": 36.2055,
+  "lon": 22.9748,
+  "patterns": [
+   "καρβουναδ*"
+  ]
+ },
+ {
+  "id": "kontolianika",
+  "gr": "Κοντολιάνικα",
+  "en": "Kontolianika",
+  "lat": 36.1982,
+  "lon": 22.9792,
+  "patterns": [
+   "κοντολιανικ*"
+  ]
+ },
+ {
+  "id": "frilingianika",
+  "gr": "Φριλιγκιάνικα",
+  "en": "Frilingianika",
+  "lat": 36.2617,
+  "lon": 22.9832,
+  "patterns": [
+   "φριλιγκιανικ*",
+   "φρυλιγκιανικ*",
+   "φριλιγγιανικ*"
+  ]
+ },
+ {
+  "id": "viaradika",
+  "gr": "Βιαράδικα",
+  "en": "Viaradika",
+  "lat": 36.24,
+  "lon": 23.0001,
+  "patterns": [
+   "βιαραδικ*"
+  ]
+ },
+ {
+  "id": "pitsinades",
+  "gr": "Πιτσινάδες",
+  "en": "Pitsinades",
+  "lat": 36.2735,
+  "lon": 22.962,
+  "patterns": [
+   "πιτσιναδ*"
+  ]
+ },
+ {
+  "id": "pitsinianika",
+  "gr": "Πιτσινιάνικα",
+  "en": "Pitsinianika",
+  "lat": 36.2016,
+  "lon": 22.9627,
+  "patterns": [
+   "πιτσινιανικ*"
+  ]
+ },
+ {
+  "id": "dokana",
+  "gr": "Δόκανα",
+  "en": "Dokana",
+  "lat": 36.2366,
+  "lon": 22.9694,
+  "patterns": [
+   "δοκανα",
+   "δοκανων"
+  ],
+  "ambiguous": true,
+  "note_gr": "και κοινή λέξη (παγίδες)",
+  "note_en": "also the word for traps"
+ },
+ {
+  "id": "kalokerines",
+  "gr": "Καλοκαιρινές",
+  "en": "Kalokerines",
+  "lat": 36.2001,
+  "lon": 22.9488,
+  "patterns": [
+   "καλοκαιρινες",
+   "καλοκαιρινων"
+  ],
+  "ambiguous": true,
+  "note_gr": "και επίθετο (καλοκαιρινός)",
+  "note_en": "also the adjective for summer"
+ },
+ {
+  "id": "goudianika",
+  "gr": "Γουδιάνικα",
+  "en": "Goudianika",
+  "lat": 36.1987,
+  "lon": 22.9891,
+  "patterns": [
+   "γουδιανικ*"
+  ]
+ },
+ {
+  "id": "alexandrades",
+  "gr": "Αλεξανδράδες",
+  "en": "Alexandrades",
+  "lat": 36.2017,
+  "lon": 22.9979,
+  "patterns": [
+   "αλεξανδραδ*"
+  ]
+ },
+ {
+  "id": "fatsadika",
+  "gr": "Φατσάδικα",
+  "en": "Fatsadika",
+  "lat": 36.1896,
+  "lon": 22.9854,
+  "patterns": [
+   "φατσαδικ*"
+  ]
+ },
+ {
+  "id": "katouni",
+  "gr": "Κατούνι",
+  "en": "Katouni",
+  "lat": 36.1874,
+  "lon": 22.9945,
+  "patterns": [
+   "κατουνι",
+   "κατουνιου"
+  ]
+ },
+ {
+  "id": "strapodi",
+  "gr": "Στραπόδι",
+  "en": "Strapodi",
+  "lat": 36.1699,
+  "lon": 22.9869,
+  "patterns": [
+   "στραποδι*"
+  ]
+ },
+ {
+  "id": "kastrisianika",
+  "gr": "Καστρισιάνικα",
+  "en": "Kastrisianika",
+  "lat": 36.2673,
+  "lon": 22.9812,
+  "patterns": [
+   "καστρισιανικ*",
+   "καστρησιανικ*"
+  ]
+ },
+ {
+  "id": "drymonas",
+  "gr": "Δρυμώνας",
+  "en": "Drymonas",
+  "lat": 36.1906,
+  "lon": 22.9555,
+  "patterns": [
+   "δρυμωνας",
+   "δρυμωνα",
+   "δρυμωνος"
+  ]
+ },
+ {
+  "id": "drymonari",
+  "gr": "Δρυμωνάρι",
+  "en": "Drymonari",
+  "lat": 36.2488,
+  "lon": 22.9782,
+  "patterns": [
+   "δρυμωναρ*"
+  ]
+ },
+ {
+  "id": "keramoto",
+  "gr": "Κεραμωτό",
+  "en": "Keramoto",
+  "lat": 36.2007,
+  "lon": 22.9713,
+  "patterns": [
+   "κεραμωτο",
+   "κεραμωτου"
+  ]
+ },
+ {
+  "id": "kalisperianika",
+  "gr": "Καλησπεριάνικα",
+  "en": "Kalisperianika",
+  "lat": 36.1932,
+  "lon": 22.9634,
+  "patterns": [
+   "καλησπεριανικ*"
+  ]
+ },
+ {
+  "id": "aloizianika",
+  "gr": "Αλοϊζιάνικα",
+  "en": "Aloizianika",
+  "lat": 36.2615,
+  "lon": 22.9738,
+  "patterns": [
+   "αλοιζιανικ*",
+   "αλωιζιανικ*"
+  ]
+ },
+ {
+  "id": "manitochori",
+  "gr": "Μανιτοχώρι",
+  "en": "Manitochori",
+  "lat": 36.1585,
+  "lon": 22.98,
+  "patterns": [
+   "μανιτοχωρ*"
+  ]
+ },
+ {
+  "id": "myrtidia",
+  "gr": "Μυρτίδια",
+  "en": "Myrtidia",
+  "lat": 36.2006,
+  "lon": 22.9248,
+  "patterns": [
+   "μυρτιδι*"
+  ],
+  "ambiguous": true,
+  "note_gr": "μαζί και οι αναφορές στη Μυρτιδιώτισσα",
+  "note_en": "includes mentions of the Myrtidiotissa"
+ },
+ {
+  "id": "kalamos",
+  "gr": "Κάλαμος",
+  "en": "Kalamos",
+  "lat": 36.1593,
+  "lon": 23.0285,
+  "patterns": [
+   "καλαμος",
+   "καλαμου",
+   "καλαμον"
+  ],
+  "ambiguous": true,
+  "note_gr": "και κοινή λέξη (καλάμι)",
+  "note_en": "also the word for reed"
+ },
+ {
+  "id": "kato-chora",
+  "gr": "Κάτω Χώρα",
+  "en": "Kato Chora",
+  "lat": 36.2452,
+  "lon": 22.9353,
+  "patterns": [
+   "\"κατω χωρα\"",
+   "\"κατω χωρας\""
+  ]
+ },
+ {
+  "id": "gerakari",
+  "gr": "Γερακάρι",
+  "en": "Gerakari",
+  "lat": 36.3312,
+  "lon": 22.932,
+  "patterns": [
+   "γερακαρι",
+   "γερακαριου"
+  ]
+ },
+ {
+  "id": "dokanades",
+  "gr": "Κλαράδικα",
+  "en": "Klaradika",
+  "lat": 36.1752,
+  "lon": 22.9713,
+  "patterns": [
+   "κλαραδικ*"
+  ]
+ },
+ {
+  "id": "kousounari",
+  "gr": "Κουσουνάρι",
+  "en": "Kousounari",
+  "lat": 36.2902,
+  "lon": 22.951,
+  "patterns": [
+   "κουσουναρ*"
+  ]
+ },
+ {
+  "id": "kryoneri",
+  "gr": "Κρυονέρι",
+  "en": "Kryoneri",
+  "lat": 36.3551,
+  "lon": 22.9462,
+  "patterns": [
+   "κρυονερι"
+  ],
+  "ambiguous": true,
+  "note_gr": "και κοινή λέξη (κρύο νερό)",
+  "note_en": "also a common word, cold spring"
+ },
+ {
+  "id": "pourko",
+  "gr": "Πούρκο",
+  "en": "Pourko",
+  "lat": 36.1775,
+  "lon": 22.9605,
+  "patterns": [
+   "πουρκο",
+   "πουρκου"
+  ]
+ },
+ {
+  "id": "petrouni",
+  "gr": "Πετρούνι",
+  "en": "Petrouni",
+  "lat": 36.3208,
+  "lon": 22.9346,
+  "patterns": [
+   "πετρουνι",
+   "πετρουνιου"
+  ]
+ },
+ {
+  "id": "progi",
+  "gr": "Προγκί",
+  "en": "Progi",
+  "lat": 36.3352,
+  "lon": 22.9411,
+  "patterns": [
+   "προγκι"
+  ]
+ },
+ {
+  "id": "platia-ammos",
+  "gr": "Πλατιά Άμμος",
+  "en": "Platia Ammos",
+  "lat": 36.3659,
+  "lon": 22.9597,
+  "patterns": [
+   "\"πλατεια αμμος\"",
+   "\"πλατια αμμος\"",
+   "\"πλατειας αμμου\"",
+   "\"πλατιας αμμου\""
+  ]
+ },
+ {
+  "id": "tsikalaria",
+  "gr": "Τσικαλαριά",
+  "en": "Tsikalaria",
+  "lat": 36.1923,
+  "lon": 22.9819,
+  "patterns": [
+   "τσικαλαρι*"
+  ]
+ },
+ {
+  "id": "travasarianika",
+  "gr": "Τραβασαριάνικα",
+  "en": "Travasarianika",
+  "lat": 36.1935,
+  "lon": 22.9914,
+  "patterns": [
+   "τραβασαριανικ*"
+  ]
+ },
+ {
+  "id": "trifyllianika",
+  "gr": "Τριφυλλιάνικα",
+  "en": "Trifyllianika",
+  "lat": 36.2982,
+  "lon": 22.977,
+  "patterns": [
+   "τριφυλλιανικ*",
+   "τριφυλιανικ*"
+  ]
+ },
+ {
+  "id": "christoforianika",
+  "gr": "Χριστοφοριάνικα",
+  "en": "Christoforianika",
+  "lat": 36.2876,
+  "lon": 22.9606,
+  "patterns": [
+   "χριστοφοριανικ*"
+  ]
+ },
+ {
+  "id": "katsoulianika",
+  "gr": "Κατσουλιάνικα",
+  "en": "Katsoulianika",
+  "lat": 36.2912,
+  "lon": 22.9558,
+  "patterns": [
+   "κατσουλιανικ*"
+  ]
+ },
+ {
+  "id": "stathianika",
+  "gr": "Σταθιάνικα",
+  "en": "Stathianika",
+  "lat": 36.2101,
+  "lon": 22.9728,
+  "patterns": [
+   "σταθιανικ*"
+  ]
+ },
+ {
+  "id": "skoulianika",
+  "gr": "Σκουλιάνικα",
+  "en": "Skoulianika",
+  "lat": 36.1894,
+  "lon": 22.9924,
+  "patterns": [
+   "σκουλιανικ*"
+  ]
+ },
+ {
+  "id": "perlengianika",
+  "gr": "Περλεγκιάνικα",
+  "en": "Perlengianika",
+  "lat": 36.2735,
+  "lon": 22.95,
+  "patterns": [
+   "περλεγκιανικ*"
+  ]
+ },
+ {
+  "id": "dourianika",
+  "gr": "Ντουριάνικα",
+  "en": "Dourianika",
+  "lat": 36.2715,
+  "lon": 22.944,
+  "patterns": [
+   "ντουριανικ*",
+   "ντουργιανικ*"
+  ]
+ },
+ {
+  "id": "tzouanianika",
+  "gr": "Τζουανιάνικα",
+  "en": "Tzouanianika",
+  "lat": 36.2651,
+  "lon": 22.9786,
+  "patterns": [
+   "τζουανιανικ*",
+   "τζωανιανικ*"
+  ]
+ },
+ {
+  "id": "mazarakianika",
+  "gr": "Μαζαρακιάνικα",
+  "en": "Mazarakianika",
+  "lat": 36.1855,
+  "lon": 22.981,
+  "patterns": [
+   "μαζαρακιανικ*"
+  ]
+ },
+ {
+  "id": "diakopoulianika",
+  "gr": "Διακοπουλιάνικα",
+  "en": "Diakopoulianika",
+  "lat": 36.3431,
+  "lon": 22.9509,
+  "patterns": [
+   "διακοπουλιανικ*"
+  ]
+ },
+ {
+  "id": "zaglanikianika",
+  "gr": "Ζαγκλανικιάνικα",
+  "en": "Zaglanikianika",
+  "lat": 36.2838,
+  "lon": 22.9701,
+  "patterns": [
+   "ζαγκλανικιανικ*",
+   "τζαγκλανικιανικ*"
+  ]
+ },
+ {
+  "id": "louradianika",
+  "gr": "Λουραντιάνικα",
+  "en": "Lourandianika",
+  "lat": 36.1722,
+  "lon": 23.005,
+  "patterns": [
+   "λουραντιανικ*",
+   "λουραντζιανικ*",
+   "λουρατζιανικ*"
+  ]
+ },
+ {
+  "id": "lianianika",
+  "gr": "Λιανιάνικα",
+  "en": "Lianianika",
+  "lat": 36.2832,
+  "lon": 22.96,
+  "patterns": [
+   "λιανιανικ*"
+  ]
+ },
+ {
+  "id": "vagianika",
+  "gr": "Βαγγιάνικα",
+  "en": "Vangianika",
+  "lat": 36.3525,
+  "lon": 22.9488,
+  "patterns": [
+   "βαγγιανικ*",
+   "βαγιανικ*"
+  ]
+ },
+ {
+  "id": "areoi",
+  "gr": "Αραίοι",
+  "en": "Areoi",
+  "lat": 36.2458,
+  "lon": 22.9565,
+  "patterns": [
+   "αραιοι",
+   "αραιων"
+  ],
+  "ambiguous": true,
+  "note_gr": "και κοινή λέξη (αραιοί)",
+  "note_en": "also the adjective for sparse"
+ },
+ {
+  "id": "piso-pigadi",
+  "gr": "Πίσω Πηγάδι",
+  "en": "Piso Pigadi",
+  "lat": 36.2426,
+  "lon": 22.9383,
+  "patterns": [
+   "\"πισω πηγαδι\""
+  ]
+ },
+ {
+  "id": "paliopoli",
+  "gr": "Παλαιόπολη",
+  "en": "Paliopoli",
+  "lat": 36.2209,
+  "lon": 23.056,
+  "patterns": [
+   "παλαιοπολ*",
+   "παλιοπολ*",
+   "σκανδεια*"
+  ],
+  "note_gr": "η αρχαία Σκάνδεια",
+  "note_en": "the ancient Skandeia"
+ },
+ {
+  "id": "paliokastro",
+  "gr": "Παλαιόκαστρο",
+  "en": "Paliokastro",
+  "lat": 36.2285,
+  "lon": 23.0299,
+  "patterns": [
+   "παλαιοκαστρ*",
+   "παλιοκαστρ*"
+  ]
+ },
+ {
+  "id": "moudari",
+  "gr": "Μουδάρη",
+  "en": "Moudari",
+  "lat": 36.3792,
+  "lon": 22.9527,
+  "patterns": [
+   "μουδαρι",
+   "μουδαριου"
+  ],
+  "note_gr": "ο φάρος του Καραβά",
+  "note_en": "the Karavas lighthouse"
+ },
+ {
+  "id": "freatsi",
+  "gr": "Φρεάτσι",
+  "en": "Freatsi",
+  "lat": 36.2946,
+  "lon": 23.0244,
+  "patterns": [
+   "φρεατσι"
+  ]
+ },
+ {
+  "id": "kokkinochorafa",
+  "gr": "Κοκκινοχώραφα",
+  "en": "Kokkinochorafa",
+  "lat": 36.2373,
+  "lon": 23.0618,
+  "patterns": [
+   "κοκκινοχωραφ*"
+  ]
+ },
+ {
+  "id": "koutsokefalo",
+  "gr": "Κουτσοκέφαλο",
+  "en": "Koutsokefalo",
+  "lat": 36.2805,
+  "lon": 23.0336,
+  "patterns": [
+   "κουτσοκεφαλ*"
+  ]
+ },
+ {
+  "id": "makronas",
+  "gr": "Μακρόνας",
+  "en": "Makronas",
+  "lat": 36.2459,
+  "lon": 23.042,
+  "patterns": [
+   "μακρονα",
+   "μακρονας"
+  ]
+ },
+ {
+  "id": "vothonas",
+  "gr": "Βόθωνας",
+  "en": "Vothonas",
+  "lat": 36.2262,
+  "lon": 23.0599,
+  "patterns": [
+   "βοθωνας",
+   "βοθωνα"
+  ]
+ },
+ {
+  "id": "mermigaris",
+  "gr": "Μερμηγκάρης",
+  "en": "Mermingaris",
+  "lat": 36.2302,
+  "lon": 22.9301,
+  "patterns": [
+   "μερμηγκαρη*",
+   "μερμιγγαρη*",
+   "μερμιγκαρη*"
+  ]
+ }
+]

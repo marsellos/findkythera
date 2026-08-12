@@ -6,6 +6,7 @@
 <meta name="robots" content="noindex">
 <title>FindKythera - Αναζήτηση στις κυθηραϊκές εφημερίδες</title>
 <link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="lib/leaflet/leaflet.css">
 </head>
 <body>
 
@@ -52,10 +53,26 @@
                placeholder="έως / to" aria-label="Έτος έως / Year to">
       </span>
       <button type="button" id="favs-btn">★ Αποθηκευμένα / Saved (0)</button>
+      <button type="button" id="map-btn">Χάρτης / Map</button>
     </div>
   </form>
 
   <div id="status" role="status"></div>
+
+  <!-- Map view: takes the place of the results list -->
+  <section id="map-view" hidden>
+    <h2 id="map-heading"></h2>
+    <p class="map-caveat">Οι κύκλοι δείχνουν σε πόσες σελίδες εφημερίδων ο όρος
+       αναφέρεται μαζί με κάθε χωριό, στην ίδια σελίδα. Δείχνει πού γράφτηκαν
+       μαζί, όχι καταγωγή. / The circles show on how many newspaper pages the
+       term is reported together with each village, on the same page. It shows
+       where they were written together, not family origin.</p>
+    <div id="map" aria-label="Χάρτης των Κυθήρων / Map of Kythera"></div>
+    <p class="map-credit">Δεδομένα χάρτη από τους συντελεστές του OpenStreetMap
+       / Map data from OpenStreetMap contributors (ODbL).</p>
+    <div id="map-panel" hidden></div>
+  </section>
+
   <ol id="results"></ol>
   <button id="more" hidden>Περισσότερα / More</button>
 
@@ -87,6 +104,7 @@
 </footer>
 
 <script src="lib/index.js"></script>
+<script src="lib/leaflet/leaflet.js"></script>
 <script type="module" src="app.js"></script>
 </body>
 </html>

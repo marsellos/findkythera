@@ -68,6 +68,31 @@ button[disabled] {
 }
 .fav-btn.saved { color: var(--accent); border-color: var(--accent); }
 #more { margin: 18px 0; }
+#map-btn {
+  background: none; border: 1px solid var(--line); color: var(--muted);
+  font-size: 14px; padding: 6px 10px;
+}
+#map-view h2 { font-size: 19px; margin: 14px 0 4px; }
+.map-caveat { font-size: 14px; color: var(--muted); margin: 4px 0 10px; }
+#map {
+  height: 420px; border: 1px solid var(--line); border-radius: 4px;
+  background: #dce8f2;
+}
+.map-credit { font-size: 12px; color: var(--muted); margin: 6px 0 0; }
+#map-panel {
+  border: 1px solid var(--line); border-radius: 4px;
+  padding: 10px 14px 14px; margin-top: 14px; background: #fff;
+}
+#map-panel h3 { margin: 4px 0 8px; font-size: 17px; }
+#map-panel p { margin: 4px 0; font-size: 15px; }
+#map-panel .map-note { color: var(--muted); font-size: 14px; }
+#map-panel ol { list-style: none; margin: 8px 0 0; padding: 0; }
+#map-panel li { border-bottom: 1px solid var(--line); padding: 12px 2px; }
+#map-panel .panel-more { margin-top: 12px; }
+.leaflet-container { font: 13px/1.4 Georgia, "Times New Roman", serif; }
+@media (pointer: coarse) {
+  #map-btn { min-height: 44px; }
+}
 #about { margin-top: 44px; border-top: 1px solid var(--line);
          padding-top: 12px; font-size: 15px; color: var(--muted); }
 #about h2 { font-size: 17px; color: var(--ink); }

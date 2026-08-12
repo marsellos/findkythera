@@ -81,7 +81,7 @@ let pendingSearch = false;
 let loadFailed = false;
 let searchGen = 0;
 let statusTimer = null;
-let current = { fts: "", paper: "", yFrom: null, yTo: null, offset: 0, loaded: 0 };
+let current = { fts: "", raw: "", paper: "", yFrom: null, yTo: null, offset: 0, loaded: 0 };
 let favs = loadFavs();
 
 async function enterApp() {
@@ -93,6 +93,7 @@ async function enterApp() {
   });
   $("more").addEventListener("click", () => runSearch(false));
   $("favs-btn").addEventListener("click", showFavs);
+  $("map-btn").addEventListener("click", showMap);
   updateFavsButton();
   setStatus("Φόρτωση ευρετηρίου... / Loading the index...");
   try {
@@ -181,6 +182,7 @@ function startSearch() {
   }
   current = {
     fts,
+    raw: $("q").value.trim(),
     paper: $("paper-filter").value,
     yFrom,
     yTo,
@@ -188,6 +190,7 @@ function startSearch() {
     loaded: 0,
   };
   searchGen++;
+  hideMap();
   $("results").innerHTML = "";
   $("more").hidden = true;
   runSearch(true);
@@ -338,6 +341,7 @@ function favsStatus(n) {
 
 function showFavs() {
   searchGen++; // supersede any running search
+  hideMap();
   stopTicker();
   $("more").hidden = true;
   $("more").disabled = false;
@@ -385,6 +389,226 @@ function renderFavRow(f) {
   out.append(a, rm);
   li.append(cite, snip, out);
   return li;
+}
+
+// ---------- village map ----------
+// Search a term, press Map: Kythera appears with a circle on each village,
+// sized by how many pages report the term together with that village on the
+// same page (precomputed data/village_pages.json intersected with one
+// rowids-only query). Clicking a village runs ONE live NEAR(term stem, 15)
+// query for that village only. Leaflet is vendored; no tile servers, no
+// external requests.
+let mapData = null;      // { villages, pages, outline } once fetched
+let leafletMap = null;
+let markersLayer = null;
+let rowidCache = { sig: "", set: null };
+let mapGen = 0;          // supersedes map draws
+let panelGen = 0;        // supersedes village panel queries
+
+function hideMap() {
+  mapGen++;
+  panelGen++;
+  $("map-view").hidden = true;
+  $("map-panel").hidden = true;
+}
+
+// SQL filter clauses matching runSearch, so the map honors paper/year filters.
+function filterSql(params) {
+  let sql = "";
+  if (current.paper) { sql += " AND newspaper = ?"; params.push(current.paper); }
+  if (current.yFrom) { sql += " AND CAST(year AS INTEGER) >= ?"; params.push(current.yFrom); }
+  if (current.yTo)   { sql += " AND CAST(year AS INTEGER) <= ?"; params.push(current.yTo); }
+  return sql;
+}
+
+async function showMap() {
+  if (!current.fts) {
+    setStatus("Κάντε πρώτα μια αναζήτηση, μετά ανοίξτε τον χάρτη. / " +
+      "Run a search first, then open the map.");
+    return;
+  }
+  if (!worker) {
+    setStatus("Το ευρετήριο φορτώνει ακόμη... / The index is still loading...");
+    return;
+  }
+  searchGen++; // supersede any running list search
+  panelGen++;
+  stopTicker();
+  $("results").innerHTML = "";
+  $("more").hidden = true;
+  $("more").disabled = false;
+  $("search-submit").disabled = false;
+  $("map-heading").textContent =
+    `Πού αναφέρεται μαζί: «${current.raw}» / Where "${current.raw}" is reported together`;
+  $("map-view").hidden = false;
+  $("map-panel").hidden = true;
+  const gen = ++mapGen;
+  try {
+    if (!mapData) {
+      setStatus("Φόρτωση χάρτη... / Loading the map...");
+      const [villages, pages, outline] = await Promise.all([
+        fetch("data/villages.json").then((r) => r.json()),
+        fetch("data/village_pages.json").then((r) => r.json()),
+        fetch("data/kythera_outline.json").then((r) => r.json()),
+      ]);
+      if (gen !== mapGen) return;
+      mapData = { villages, pages, outline };
+    }
+    const sig = JSON.stringify(
+      [current.fts, current.paper, current.yFrom, current.yTo]);
+    if (rowidCache.sig !== sig) {
+      startTicker();
+      const params = [current.fts];
+      const sql = "SELECT rowid AS r FROM pages WHERE text_norm MATCH ?"
+        + filterSql(params);
+      const rows = await worker.db.query(sql, params);
+      if (gen !== mapGen) return;
+      rowidCache = { sig, set: new Set(rows.map((x) => x.r)) };
+    }
+    stopTicker();
+    drawMap();
+  } catch (err) {
+    if (gen !== mapGen) return;
+    console.error(err);
+    stopTicker();
+    setStatus("Ο χάρτης δεν φορτώθηκε. Δοκιμάστε ξανά. / " +
+      "The map failed to load. Try again.", true);
+  }
+}
+
+function villageCount(v) {
+  const set = rowidCache.set;
+  let n = 0;
+  for (const r of mapData.pages[v.id] || []) if (set.has(r)) n++;
+  return n;
+}
+
+function initLeaflet() {
+  leafletMap = L.map("map", { attributionControl: false, zoomSnap: 0.25 });
+  const outline = L.geoJSON(mapData.outline, {
+    style: { color: "#8a8a8f", weight: 1, fillColor: "#f7f3ea", fillOpacity: 1 },
+  }).addTo(leafletMap);
+  leafletMap.fitBounds(outline.getBounds().pad(0.04));
+  markersLayer = L.layerGroup().addTo(leafletMap);
+}
+
+function drawMap() {
+  if (!leafletMap) initLeaflet();
+  leafletMap.invalidateSize();
+  markersLayer.clearLayers();
+  const counts = mapData.villages.map((v) => ({ v, n: villageCount(v) }));
+  const maxN = Math.max(1, ...counts.map((c) => c.n));
+  let hitVillages = 0;
+  for (const { v, n } of counts) {
+    if (n > 0) hitVillages++;
+    const marker = L.circleMarker([v.lat, v.lon], n > 0 ? {
+      radius: 4 + 14 * Math.sqrt(n / maxN),
+      className: "vc vc-hit",
+      color: "#fff", weight: 1,
+      fillColor: "#0b5394", fillOpacity: 0.55,
+    } : {
+      radius: 2.5,
+      className: "vc vc-zero",
+      color: "#9aa0a6", weight: 1,
+      fillColor: "#9aa0a6", fillOpacity: 0.6,
+    });
+    marker.bindTooltip(`${v.gr} / ${v.en}: ${n}`);
+    marker.on("click", () => openVillagePanel(v, n));
+    markersLayer.addLayer(marker);
+  }
+  setStatus(`Ο όρος αναφέρεται μαζί με ${hitVillages} από τα ${counts.length} ` +
+    `μέρη. Πατήστε έναν κύκλο. / The term is reported together with ` +
+    `${hitVillages} of the ${counts.length} places. Press a circle.`);
+}
+
+async function openVillagePanel(v, sameCount) {
+  const gen = ++panelGen;
+  const panel = $("map-panel");
+  panel.innerHTML = "";
+  panel.hidden = false;
+  const h = document.createElement("h3");
+  h.textContent = `${v.gr} / ${v.en}`;
+  panel.appendChild(h);
+  const same = document.createElement("p");
+  same.textContent = `Στην ίδια σελίδα με «${current.raw}»: ${sameCount} ` +
+    `σελίδες. / On the same page as "${current.raw}": ${sameCount} pages.`;
+  panel.appendChild(same);
+  if (v.note_gr || v.note_en) {
+    const note = document.createElement("p");
+    note.className = "map-note";
+    note.textContent = `Σημείωση: ${v.note_gr || ""} / Note: ${v.note_en || ""}`;
+    panel.appendChild(note);
+  }
+  if (v.ambiguous) {
+    const amb = document.createElement("p");
+    amb.className = "map-note";
+    amb.textContent = "Το όνομα είναι και κοινή λέξη, οι αριθμοί βγαίνουν " +
+      "μεγάλοι. / The name is also a common word, so the counts run high.";
+    panel.appendChild(amb);
+  }
+  if (sameCount === 0) {
+    const none = document.createElement("p");
+    none.textContent = "Καμία κοινή σελίδα. / No shared pages.";
+    panel.appendChild(none);
+    return;
+  }
+  const near = document.createElement("p");
+  near.textContent = "Μέτρηση σε απόσταση 15 λέξεων... / " +
+    "Counting within 15 words...";
+  panel.appendChild(near);
+  const nearExpr = v.patterns
+    .map((p) => `NEAR(${current.fts} ${p}, 15)`).join(" OR ");
+  try {
+    const params = [nearExpr];
+    const sql = "SELECT count(*) AS n FROM pages WHERE text_norm MATCH ?"
+      + filterSql(params);
+    const nearCount = (await worker.db.query(sql, params))[0].n;
+    if (gen !== panelGen) return;
+    near.textContent = `Σε απόσταση έως 15 λέξεων: ${nearCount} σελίδες. / ` +
+      `Within 15 words of each other: ${nearCount} pages.`;
+    // List the closest evidence there is: NEAR pages when any exist,
+    // otherwise the same-page matches.
+    const sameExpr = `(${current.fts}) AND (${v.patterns.join(" OR ")})`;
+    const listExpr = nearCount > 0 ? nearExpr : sameExpr;
+    const label = document.createElement("p");
+    label.className = "map-note";
+    label.textContent = nearCount > 0
+      ? "Σελίδες όπου γράφονται κοντά: / Pages where they are written close together:"
+      : "Σελίδες όπου γράφονται στην ίδια σελίδα: / Pages where they appear on the same page:";
+    panel.appendChild(label);
+    const ol = document.createElement("ol");
+    panel.appendChild(ol);
+    const moreBtn = document.createElement("button");
+    moreBtn.type = "button";
+    moreBtn.className = "panel-more";
+    moreBtn.textContent = "Περισσότερα / More";
+    moreBtn.hidden = true;
+    panel.appendChild(moreBtn);
+    let offset = 0;
+    const loadPages = async () => {
+      moreBtn.disabled = true;
+      const p2 = [listExpr];
+      let sql2 = `SELECT newspaper_gr, newspaper, year, issue, page, filename,
+          snippet(pages, 6, char(1), char(2), ' … ', 12) AS snip,
+          source_url, low_conf
+        FROM pages WHERE text_norm MATCH ?` + filterSql(p2);
+      sql2 += " ORDER BY rank LIMIT ? OFFSET ?";
+      p2.push(PAGE_SIZE + 1, offset);
+      const rows = await worker.db.query(sql2, p2);
+      if (gen !== panelGen) return;
+      for (const r of rows.slice(0, PAGE_SIZE)) ol.appendChild(renderRow(r));
+      offset += PAGE_SIZE;
+      moreBtn.hidden = rows.length <= PAGE_SIZE;
+      moreBtn.disabled = false;
+    };
+    moreBtn.addEventListener("click", loadPages);
+    await loadPages();
+  } catch (err) {
+    if (gen !== panelGen) return;
+    console.error(err);
+    near.textContent = "Η μέτρηση απέτυχε. Δοκιμάστε ξανά. / " +
+      "The count failed. Try again.";
+  }
 }
 
 initGate();
