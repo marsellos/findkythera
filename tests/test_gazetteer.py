@@ -18,14 +18,27 @@ LOCAL_INDEX = Path(r"C:\ARTI\mpamp\efimerides_ocr\index.db")
 TOTAL_PAGES = 17757
 
 
+# One box per island. A place with no "island" key is on Kythera.
+BOXES = {
+    "kythera": (36.05, 36.45, 22.85, 23.15),
+    "antikythera": (35.80, 35.92, 23.24, 23.38),
+}
+
+
 def test_villages_wellformed():
     ids = [v["id"] for v in VILLAGES]
     assert len(ids) == len(set(ids)), "duplicate village ids"
     for v in VILLAGES:
-        assert 36.05 <= v["lat"] <= 36.45, v["id"]
-        assert 22.85 <= v["lon"] <= 23.15, v["id"]
+        lat0, lat1, lon0, lon1 = BOXES[v.get("island", "kythera")]
+        assert lat0 <= v["lat"] <= lat1, v["id"]
+        assert lon0 <= v["lon"] <= lon1, v["id"]
         assert v["gr"] and v["en"], v["id"]
         assert v["patterns"], v["id"]
+
+
+def test_no_duplicate_coordinates():
+    points = [(v["lat"], v["lon"]) for v in VILLAGES]
+    assert len(points) == len(set(points)), "two places share one point"
 
 
 def test_village_pages_matches_gazetteer():

@@ -803,5 +803,74 @@
    "μερμιγγαρη*",
    "μερμιγκαρη*"
   ]
+ },
+ {
+  "id": "antikythera",
+  "gr": "Αντικύθηρα",
+  "en": "Antikythera",
+  "island": "antikythera",
+  "lat": 35.8644,
+  "lon": 23.2988,
+  "patterns": [
+   "αντικυθηρα",
+   "αντικυθηρων",
+   "αντικυθηροις"
+  ],
+  "note_gr": "όλο το νησί, όχι ένας οικισμός· δεν μετριέται το εθνικό «Αντικυθηρίων»",
+  "note_en": "the whole island, not one settlement; the demonym Antikythirion is counted separately"
+ },
+ {
+  "id": "galaniana",
+  "gr": "Γαλανιανά",
+  "en": "Galaniana",
+  "island": "antikythera",
+  "lat": 35.8578,
+  "lon": 23.3052,
+  "patterns": [
+   "γαλανιανα",
+   "γαλανιανων"
+  ]
+ },
+ {
+  "id": "charchaliana",
+  "gr": "Χαρχαλιανά",
+  "en": "Charchaliana",
+  "island": "antikythera",
+  "lat": 35.8727,
+  "lon": 23.2886,
+  "patterns": [
+   "χαρχαλιανα",
+   "χαρχαλιανων"
+  ]
+ },
+ {
+  "id": "kastro_aigila",
+  "gr": "Κάστρο (αρχαία Αίγιλα)",
+  "en": "Kastro (ancient Aigila)",
+  "island": "antikythera",
+  "lat": 35.8875,
+  "lon": 23.2958,
+  "patterns": [
+   "αιγιλα",
+   "αιγιλια"
+  ],
+  "note_gr": "μετριέται το αρχαίο όνομα· η λέξη «κάστρο» είναι πολύ κοινή για να μετρηθεί",
+  "note_en": "counted by its ancient name; the word kastro is far too common to count"
+ },
+ {
+  "id": "xiropotamos",
+  "gr": "Ξηροπόταμος",
+  "en": "Xiropotamos",
+  "island": "antikythera",
+  "lat": 35.8869,
+  "lon": 23.2949,
+  "patterns": [
+   "ξηροποταμος",
+   "ξηροποταμου",
+   "ξηροποταμο"
+  ],
+  "ambiguous": true,
+  "note_gr": "το ίδιο όνομα υπάρχει και σε ρέμα των Κυθήρων",
+  "note_en": "a stream on Kythera carries the same name"
  }
 ]
