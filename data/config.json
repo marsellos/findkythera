@@ -1,9 +1,9 @@
 {
   "serverMode": "chunked",
   "requestChunkSize": 1024,
-  "databaseLengthBytes": 490811392,
+  "databaseLengthBytes": 490524672,
   "serverChunkSize": 89999360,
   "urlPrefix": "web_index.db.",
   "suffixLength": 3,
-  "cacheBust": "2026-08-11"
+  "cacheBust": "490524672-1786642478"
 }
