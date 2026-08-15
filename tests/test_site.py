@@ -224,7 +224,13 @@ def test_map_draws_markers_and_panel(page):
     # The rowids query runs, then circles appear: every village drawn, at
     # least one co-occurring with the surname.
     expect(page.locator("path.vc-hit").first).to_be_visible(timeout=120000)
-    assert page.locator("path.vc").count() == 72
+    # Two frames, each fitted to its own island: 72 places on Kythera and
+    # 7 on Antikythera, and no place drawn in the wrong frame.
+    assert page.locator("#map path.vc").count() == 72
+    assert page.locator("#map-ak path.vc").count() == 7
+    expect(page.locator("#map-ak")).to_be_visible()
+    expect(page.locator(".map-frame-inset")).to_contain_text("Αντικύθηρα")
+    expect(page.locator(".frame-scale")).to_contain_text("άλλη κλίμακα")
     # The map replaces the results list.
     expect(page.locator("#results li")).to_have_count(0)
     # Clicking a village opens the panel with the honest same-page count,

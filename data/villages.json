@@ -859,18 +859,54 @@
  },
  {
   "id": "xiropotamos",
-  "gr": "Ξηροπόταμος",
-  "en": "Xiropotamos",
+  "gr": "Ξηροπόταμος (Ξεροπόταμος)",
+  "en": "Xiropotamos (Xeropotamos)",
   "island": "antikythera",
   "lat": 35.8869,
   "lon": 23.2949,
   "patterns": [
    "ξηροποταμος",
    "ξηροποταμου",
-   "ξηροποταμο"
+   "ξηροποταμο",
+   "ξεροποταμος",
+   "ξεροποταμου",
+   "ξεροποταμο"
   ],
   "ambiguous": true,
-  "note_gr": "το ίδιο όνομα υπάρχει και σε ρέμα των Κυθήρων",
-  "note_en": "a stream on Kythera carries the same name"
+  "note_gr": "η παραλία και το αρχαίο λιμάνι· οι εφημερίδες το γράφουν και με η και με ε (ο ΟΚΧ γράφει Ξεροπόταμος)· λίγες σελίδες είναι το κοινό ουσιαστικό (χείμαρρος) ή ρέμα των Κυθήρων",
+  "note_en": "the beach and the ancient harbour; the papers spell it with both eta and epsilon (OpenStreetMap uses Xeropotamos); a few pages are the common noun (a dry watercourse) or a Kythera stream"
+ },
+ {
+  "id": "potamos_antikythera",
+  "gr": "Ποταμός Αντικυθήρων",
+  "en": "Potamos, Antikythera",
+  "island": "antikythera",
+  "lat": 35.8816,
+  "lon": 23.2893,
+  "patterns": [
+   "\"ποταμου αντικυθηρων\"",
+   "\"ποταμο αντικυθηρων\"",
+   "\"ποταμος αντικυθηρων\"",
+   "\"ποταμον αντικυθηρων\""
+  ],
+  "note_gr": "το κεντρικό χωριό και το λιμάνι των Αντικυθήρων· μετριέται μόνο όπου η εφημερίδα γράφει και το νησί δίπλα στο όνομα, ώστε να μη μπερδεύεται με τον Ποταμό Κυθήρων· άρα ο αριθμός είναι κατώτατο όριο",
+  "note_en": "the main village and the harbour of Antikythera; counted only where the paper prints the island beside the name, so that it is never confused with Potamos on Kythera; the figure is therefore a lower bound"
+ },
+ {
+  "id": "kamareles",
+  "gr": "Καμαρέλες",
+  "en": "Kamareles",
+  "island": "antikythera",
+  "lat": 35.8704,
+  "lon": 23.2832,
+  "patterns": [
+   "καμαρελα",
+   "καμαρελας",
+   "καμαρελες",
+   "καμαρελων"
+  ],
+  "ambiguous": true,
+  "note_gr": "ο όρμος και ο σχεδιαζόμενος δεύτερος λιμενίσκος· υπάρχει και Καμαρέλα στην Παλιόπολη Κυθήρων",
+  "note_en": "the cove and the planned second landing; a Kamarela also exists at Paliopoli on Kythera"
  }
 ]

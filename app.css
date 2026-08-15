@@ -74,9 +74,22 @@ button[disabled] {
 }
 #map-view h2 { font-size: 19px; margin: 14px 0 4px; }
 .map-caveat { font-size: 14px; color: var(--muted); margin: 4px 0 10px; }
-#map {
+/* Kythera on the left, Antikythera in its own frame beside it. The two
+   islands are 38 km apart, so one shared view would print both as specks;
+   each frame keeps its own scale and says so. */
+.map-frames { display: flex; gap: 10px; align-items: flex-start; }
+.map-frame { flex: 1 1 0; min-width: 0; }
+.map-frame-inset { flex: 0 0 27%; }
+#map, #map-ak {
   height: 420px; border: 1px solid var(--line); border-radius: 4px;
   background: #dce8f2;
+}
+.frame-label { font-size: 14px; margin: 5px 0 0; }
+.frame-scale { color: var(--muted); font-size: 13px; }
+@media (max-width: 700px) {
+  .map-frames { display: block; }
+  .map-frame-inset { margin-top: 12px; }
+  #map-ak { height: 260px; }
 }
 .map-credit { font-size: 12px; color: var(--muted); margin: 6px 0 0; }
 #map-panel {

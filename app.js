@@ -398,9 +398,13 @@ function renderFavRow(f) {
 // rowids-only query). Clicking a village runs ONE live NEAR(term stem, 15)
 // query for that village only. Leaflet is vendored; no tile servers, no
 // external requests.
-let mapData = null;      // { villages, pages, outline } once fetched
-let leafletMap = null;
+// Antikythera lies about 38 km south, so it gets its own frame beside Kythera
+// rather than one shared view that would shrink both islands to specks.
+let mapData = null;      // { villages, pages, outline, outlineAk } once fetched
+let leafletMap = null;   // Kythera
+let leafletMapAk = null; // Antikythera
 let markersLayer = null;
+let markersLayerAk = null;
 let rowidCache = { sig: "", set: null };
 let mapGen = 0;          // supersedes map draws
 let panelGen = 0;        // supersedes village panel queries
@@ -446,13 +450,14 @@ async function showMap() {
   try {
     if (!mapData) {
       setStatus("Φόρτωση χάρτη... / Loading the map...");
-      const [villages, pages, outline] = await Promise.all([
+      const [villages, pages, outline, outlineAk] = await Promise.all([
         fetch("data/villages.json").then((r) => r.json()),
         fetch("data/village_pages.json").then((r) => r.json()),
         fetch("data/kythera_outline.json").then((r) => r.json()),
+        fetch("data/antikythera_outline.json").then((r) => r.json()),
       ]);
       if (gen !== mapGen) return;
-      mapData = { villages, pages, outline };
+      mapData = { villages, pages, outline, outlineAk };
     }
     const sig = JSON.stringify(
       [current.fts, current.paper, current.yFrom, current.yTo]);
@@ -483,24 +488,43 @@ function villageCount(v) {
   return n;
 }
 
-function initLeaflet() {
-  leafletMap = L.map("map", { attributionControl: false, zoomSnap: 0.25 });
-  const outline = L.geoJSON(mapData.outline, {
+function makeFrame(divId, geojson) {
+  const map = L.map(divId, { attributionControl: false, zoomSnap: 0.25 });
+  const outline = L.geoJSON(geojson, {
     style: { color: "#8a8a8f", weight: 1, fillColor: "#f7f3ea", fillOpacity: 1 },
-  }).addTo(leafletMap);
-  leafletMap.fitBounds(outline.getBounds().pad(0.04));
-  markersLayer = L.layerGroup().addTo(leafletMap);
+  }).addTo(map);
+  map.fitBounds(outline.getBounds().pad(0.04));
+  return { map, layer: L.layerGroup().addTo(map) };
+}
+
+function initLeaflet() {
+  const k = makeFrame("map", mapData.outline);
+  leafletMap = k.map;
+  markersLayer = k.layer;
+  const a = makeFrame("map-ak", mapData.outlineAk);
+  leafletMapAk = a.map;
+  markersLayerAk = a.layer;
 }
 
 function drawMap() {
   if (!leafletMap) initLeaflet();
   leafletMap.invalidateSize();
+  leafletMapAk.invalidateSize();
   markersLayer.clearLayers();
+  markersLayerAk.clearLayers();
   const counts = mapData.villages.map((v) => ({ v, n: villageCount(v) }));
-  const maxN = Math.max(1, ...counts.map((c) => c.n));
+  // The two frames are at different scales, so a circle is sized against the
+  // busiest place on its own island. Comparing across the frames by eye would
+  // be wrong either way.
+  const maxK = Math.max(1, ...counts.filter((c) => c.v.island !== "antikythera")
+    .map((c) => c.n));
+  const maxA = Math.max(1, ...counts.filter((c) => c.v.island === "antikythera")
+    .map((c) => c.n));
   let hitVillages = 0;
   for (const { v, n } of counts) {
     if (n > 0) hitVillages++;
+    const onAk = v.island === "antikythera";
+    const maxN = onAk ? maxA : maxK;
     const marker = L.circleMarker([v.lat, v.lon], n > 0 ? {
       radius: 4 + 14 * Math.sqrt(n / maxN),
       className: "vc vc-hit",
@@ -514,7 +538,7 @@ function drawMap() {
     });
     marker.bindTooltip(`${v.gr} / ${v.en}: ${n}`);
     marker.on("click", () => openVillagePanel(v, n));
-    markersLayer.addLayer(marker);
+    (onAk ? markersLayerAk : markersLayer).addLayer(marker);
   }
   setStatus(`Ο όρος αναφέρεται μαζί με ${hitVillages} από τα ${counts.length} ` +
     `μέρη. Πατήστε έναν κύκλο. / The term is reported together with ` +
