@@ -103,6 +103,9 @@ button[disabled] {
 #map-panel li { border-bottom: 1px solid var(--line); padding: 12px 2px; }
 #map-panel .panel-more { margin-top: 12px; }
 .leaflet-container { font: 13px/1.4 Georgia, "Times New Roman", serif; }
+/* A bilingual label is long and the Antikythera frame is narrow, so a label
+   wraps rather than running past the edge of its frame. */
+.leaflet-tooltip { max-width: 165px; white-space: normal; }
 @media (pointer: coarse) {
   #map-btn { min-height: 44px; }
 }

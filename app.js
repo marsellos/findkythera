@@ -536,7 +536,10 @@ function drawMap() {
       color: "#9aa0a6", weight: 1,
       fillColor: "#9aa0a6", fillOpacity: 0.6,
     });
-    marker.bindTooltip(`${v.gr} / ${v.en}: ${n}`);
+    // The Antikythera frame is narrow, so its labels sit above the circle and
+    // wrap, instead of running off the side of the frame and being cut.
+    marker.bindTooltip(`${v.gr} / ${v.en}: ${n}`,
+      onAk ? { direction: "top" } : {});
     marker.on("click", () => openVillagePanel(v, n));
     (onAk ? markersLayerAk : markersLayer).addLayer(marker);
   }
